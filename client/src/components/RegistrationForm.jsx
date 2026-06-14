@@ -11,7 +11,10 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Mail, Phone, Loader2, CheckCircle2, AlertCircle, Send, Sparkles } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// In production (unified Render deploy), VITE_API_URL is not set so we fall back
+// to '' which makes axios use a relative path (/api/enquiry) — same origin, no CORS.
+// In local dev, client/.env sets VITE_API_URL=http://localhost:5000.
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^\d{10}$/;
