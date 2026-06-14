@@ -23,19 +23,26 @@ const isProd = process.env.NODE_ENV === 'production';
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
 // In development, accept the local Vite dev server.
-// In production, accept the FRONTEND_URL env var (or same-origin if unified deploy).
+// In production unified deploy (Render), the React frontend is served by this
+// same Express server, so requests from the frontend carry the Render URL as
+// their origin. We allow it automatically via RENDER_EXTERNAL_URL (set by Render)
+// and any explicit FRONTEND_URL env var for separated deploys.
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
-  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL,       // Separated deploy: Vercel/Netlify URL
+  process.env.RENDER_EXTERNAL_URL, // Unified deploy: Render auto-sets this
 ].filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, cb) => {
-      // Allow requests with no origin (e.g. Postman, server-to-server, same-origin)
+      // Allow requests with no origin (curl, Postman, server-to-server)
       if (!origin) return cb(null, true);
+      // Allow whitelisted origins
       if (allowedOrigins.includes(origin)) return cb(null, true);
+      // In production unified mode, allow any *.onrender.com origin (same service)
+      if (isProd && origin.endsWith('.onrender.com')) return cb(null, true);
       cb(new Error(`CORS blocked for origin: ${origin}`));
     },
     methods: ['GET', 'POST'],
