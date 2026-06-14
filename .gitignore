@@ -1,0 +1,36 @@
+# Dependency directories
+node_modules/
+**/node_modules/
+
+# Environment variables & secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+**/env
+**/.env
+
+# Build outputs
+dist/
+**/dist/
+build/
+**/build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+# Editor & System Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Lock files (keep package-lock.json, ignore others)
+yarn.lock
+pnpm-lock.yaml

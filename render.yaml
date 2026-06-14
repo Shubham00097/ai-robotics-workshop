@@ -1,0 +1,26 @@
+# render.yaml
+# One-click deployment config for Render.com (Unified — single service)
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: ai-robotics-workshop
+    env: node
+    region: singapore          # Closest to India — change as needed
+    plan: free
+
+    # Render clones the repo, runs buildCommand, then startCommand
+    buildCommand: npm run build
+    startCommand: npm start
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # Set MONGO_URI in the Render dashboard (keep secrets out of this file)
+      - key: MONGO_URI
+        sync: false            # Render will prompt you to fill this in
+
+      # Optional: only needed for separated deploy (leave blank for unified)
+      - key: FRONTEND_URL
+        sync: false
